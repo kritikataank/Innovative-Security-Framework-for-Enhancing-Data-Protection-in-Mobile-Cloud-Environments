@@ -1,11 +1,10 @@
-// generateKeyPair.js
-const crypto = require('crypto');
-const fs = require('fs');
+const { generateKeyPair: _generateKeyPair } = require('crypto');
+const { writeFileSync } = require('fs');
 
 // Function to generate RSA key pair
 function generateKeyPair() {
     // Generate the key pair
-    crypto.generateKeyPair('rsa', {
+    _generateKeyPair('rsa', {
         modulusLength: 2048, // Key size in bits
         publicKeyEncoding: {
             type: 'spki', // Recommended for public key
@@ -22,11 +21,11 @@ function generateKeyPair() {
         }
 
         // Save the private key to a secure location
-        fs.writeFileSync('privateKey.pem', privateKey);
+        writeFileSync('privateKey.pem', privateKey);
         console.log('Private key saved to privateKey.pem');
 
         // Save the public key to a file or return it to be used in the server
-        fs.writeFileSync('publicKey.pem', publicKey);
+        writeFileSync('publicKey.pem', publicKey);
         console.log('Public key saved to publicKey.pem');
     });
 }

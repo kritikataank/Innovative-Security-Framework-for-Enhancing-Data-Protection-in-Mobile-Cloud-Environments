@@ -1,3 +1,4 @@
+// symmetricCipher.js
 const { randomBytes, createCipheriv, createDecipheriv } = require('crypto');
 
 // Generate a random symmetric key
@@ -22,5 +23,4 @@ function decryptMessage(encryptedMessage, key, iv) {
     return decrypted;
 }
 
-// Export the functions using CommonJS syntax
 module.exports = { generateKey, encryptMessage, decryptMessage };
