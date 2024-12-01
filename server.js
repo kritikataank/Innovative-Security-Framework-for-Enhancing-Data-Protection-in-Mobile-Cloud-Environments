@@ -4,6 +4,12 @@ const http = require('http');
 const socketIo = require('socket.io');
 const fs = require('fs');
 const crypto = require('crypto');
+const { 
+    encryptSymmetricKey, 
+    decryptSymmetricKey, 
+    encryptMessageWithCipher, 
+    decryptMessageWithCipher 
+} = require('./encryptDecrypt'); // Import necessary functions
 
 const app = express();
 const server = http.createServer(app);
@@ -23,16 +29,42 @@ app.get('/public-key', (req, res) => {
 
 // Example route to demonstrate decryption (for testing purposes)
 app.post('/decrypt', (req, res) => {
-    const { encryptedMessage } = req.body;
-
-    // Decrypt the message using the private key
+    const { encryptedMessage, encryptedSymmetricKey } = req.body; // Expecting encrypted message, symmetric key, cipher type, and IV
+    const cipherType = 'simon';
+    const iv = encryptMessage(message, encryptedSymmetricKey).iv;
+    // Decrypt the symmetric key using the private key
+    let symmetricKey;
     try {
-        const buffer = Buffer.from(encryptedMessage, 'base64');
-        const decryptedMessage = crypto.privateDecrypt(privateKey, buffer);
-        res.send({ decryptedMessage: decryptedMessage.toString('utf8') });
+        symmetricKey = decryptSymmetricKey(encryptedSymmetricKey); // Decrypt the symmetric key
     } catch (error) {
-        console.error('Decryption error:', error);
-        res.status(500).send('Decryption failed');
+        console.error('Symmetric key decryption error:', error);
+        return res.status(500).send('Symmetric key decryption failed');
+    }
+
+    // Decrypt the message using the decrypted symmetric key
+    let decryptedMessage;
+    try {
+        decryptedMessage = decryptMessageWithCipher(encryptedMessage, symmetricKey, cipherType, iv); // Use the correct decryption function
+        res.send({ decryptedMessage: decryptedMessage });
+    } catch (error) {
+        console.error('Message decryption error:', error);
+        res.status(500).send('Message decryption failed');
+    }
+});
+
+// New route to handle encryption
+app.post('/encrypt', (req, res) => {
+    const { message} = req.body; // Expecting cipherType from the client
+    const cipherType = 'simon';
+    // Encrypt the message using your encryption function
+    try {
+        const { encryptedMessage, encryptedSymmetricKey, iv } = encryptMessageWithCipher(message, cipherType);
+
+        // Send back the encrypted message and the encrypted symmetric key
+        res.send({ encryptedMessage, encryptedSymmetricKey, iv }); // Include iv for SIMON
+    } catch (error) {
+        console.error('Encryption error:', error);
+        res.status(500).send('Encryption failed');
     }
 });
 

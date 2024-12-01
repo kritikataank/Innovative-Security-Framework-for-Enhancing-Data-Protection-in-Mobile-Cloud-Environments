@@ -20,53 +20,56 @@ function decryptSymmetricKey(encryptedKey) {
     return decryptedKey;
 }
 
-// Function to encrypt a message
-function encryptMessageWithCipher(message, cipherType) {
+// Main function to demonstrate the process
+function main() {
+    const message = "kritika";
+    
+    // Step 1: Choose a cipher (PRESENT or SIMON)
+    const cipherType = 'simon'; // Change to 'present' to use PRESENT
+
+    // Step 2: Use a predefined symmetric key
     let symmetricKey;
     let iv; // Declare iv here for scope
-    let encryptedMessage;
-
     if (cipherType === 'present') {
         symmetricKey = crypto.randomBytes(10); // 80 bits for PRESENT
-        encryptedMessage = encryptPresent(message, symmetricKey);
     } else if (cipherType === 'simon') {
         symmetricKey = generateKey(); // Generate a 32-byte key for SIMON
-        const result = encryptMessage(message, symmetricKey);
-        encryptedMessage = result.encryptedData;
-        iv = result.iv; // Initialization vector returned by the encryption
     } else {
         throw new Error('Unsupported cipher type');
     }
 
-    // Encrypt the symmetric key using RSA
+    // Step 3: Encrypt the message with the symmetric key
+    let encryptedMessage;
+    if (cipherType === 'present') {
+        // Convert the message to a string before passing it to encryptPresent
+        const plainText = message; // Convert buffer to string
+        encryptedMessage = encryptPresent(plainText, symmetricKey);
+        console.log('Encrypted Message (PRESENT):', encryptedMessage.toString(16)); // Display as hex
+    } else if (cipherType === 'simon') {
+        const result = encryptMessage(message, symmetricKey);
+        encryptedMessage = result.encryptedData;
+        iv = result.iv; // Initialization vector returned by the encryption
+        console.log('Encrypted Message (SIMON):', encryptedMessage);
+    }
+
+    // Step 4: Encrypt the symmetric key using RSA
     const encryptedSymmetricKey = encryptSymmetricKey(symmetricKey);
-    
-    // Return both the encrypted message and the encrypted symmetric key
-    return {
-        encryptedMessage,
-        encryptedSymmetricKey,
-        iv, // Return iv if using SIMON
-    };
-}
+    console.log('Encrypted Symmetric Key:', encryptedSymmetricKey);
 
-// Function to decrypt a message
-function decryptMessageWithCipher(encryptedMessage, encryptedSymmetricKey, cipherType, iv) {
+    // Step 5: Decrypt the symmetric key using RSA
     const decryptedSymmetricKey = decryptSymmetricKey(encryptedSymmetricKey);
+    console.log('Decrypted Symmetric Key:', decryptedSymmetricKey.toString('hex'));
 
+    // Step 6: Decrypt the message using the decrypted symmetric key
     let decryptedMessage;
     if (cipherType === 'present') {
         decryptedMessage = decryptPresent(encryptedMessage, decryptedSymmetricKey);
+        console.log('Decrypted Message (PRESENT):', decryptedMessage);
     } else if (cipherType === 'simon') {
         decryptedMessage = decryptMessage(encryptedMessage, decryptedSymmetricKey, iv); // Use iv defined earlier
+        console.log('Decrypted Message (SIMON):', decryptedMessage);
     }
-
-    return decryptedMessage;
 }
 
-// Export functions
-module.exports = {
-    encryptSymmetricKey,
-    decryptSymmetricKey,
-    encryptMessageWithCipher,
-    decryptMessageWithCipher,
-};
+// Execute the main function
+main();
