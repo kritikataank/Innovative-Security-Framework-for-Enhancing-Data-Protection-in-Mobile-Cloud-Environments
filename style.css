@@ -1,7 +1,7 @@
-/* styles.css */
+/* General Styling */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #e5e5e5; /* Light gray background */
     margin: 0;
     padding: 20px;
 }
@@ -10,41 +10,91 @@ body {
     max-width: 600px;
     margin: auto;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
+/* Chat Header */
+.header {
+    background-color: #0095f6; /* Instagram blue */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Chat Messages Area */
 .chat-box {
-    height: 300px;
+    flex-grow: 1;
+    height: 350px;
     overflow-y: scroll;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
     padding: 10px;
     border-radius: 5px;
+    background: #f9f9f9;
 }
 
-.chat-box div {
-    margin: 5px 0;
+.chat-box .message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: 75%;
+    position: relative;
+}
+
+.chat-box .message.outgoing {
+    background-color: #0095f6; /* Blue for outgoing messages */
+    color: white;
+    margin-left: auto; /* Align to the right */
+}
+
+.chat-box .message.incoming {
+    background-color: #e5e5e5; /* Light gray for incoming messages */
+    color: black;
+}
+
+/* Input Area */
+.input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
 }
 
 input[type="text"] {
-    width: 80%;
+    flex-grow: 1;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 20px; /* Rounded input field */
+    font-size: 14px;
 }
 
 button {
-    padding: 5px 10px;
-    margin-left: 10px; /* Add some space between message and button */
+    padding: 10px 15px;
+    margin-left: 10px;
     border: none;
-    background-color: #007bff;
+    background-color: #0095f6; /* Instagram blue */
     color: white;
-    border-radius: 5px;
+    border-radius: 20px; /* Rounded button */
     cursor: pointer;
+    font-size: 14px;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #007bbd; /* Darker blue on hover */
+}
+
+#upload-button {
+    padding: 10px;
+    border: none;
+    background-color: transparent; /* Transparent background */
+    cursor: pointer;
+    font-size: 20px; /* Larger icon size */
+    margin-right: 10px;
+}
+
+#upload-button:hover {
+    color: #007bbd; /* Change color on hover */
 }

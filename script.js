@@ -8,6 +8,13 @@ if (!username) {
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
 const chatBox = document.getElementById('chat-box');
+const uploadButton = document.getElementById('upload-button');
+const fileUpload = document.getElementById('file-upload');
+
+// File upload button
+uploadButton.addEventListener('click', () => {
+    fileUpload.click();
+});
 
 // Enable the input and button after username is set
 messageInput.disabled = false;

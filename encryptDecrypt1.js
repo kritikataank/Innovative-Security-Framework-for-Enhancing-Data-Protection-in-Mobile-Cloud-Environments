@@ -22,7 +22,7 @@ function decryptSymmetricKey(encryptedKey) {
 
 // Main function to demonstrate the process
 function main() {
-    const message = "kritika";
+    const message = "hello";
     
     // Step 1: Choose a cipher (PRESENT or SIMON)
     const cipherType = 'simon'; // Change to 'present' to use PRESENT

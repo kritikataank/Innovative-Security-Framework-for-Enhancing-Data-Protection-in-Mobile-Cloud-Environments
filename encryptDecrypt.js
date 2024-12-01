@@ -1,31 +1,31 @@
-const fs = require('fs');
 const crypto = require('crypto');
 const { encryptPresent, decryptPresent } = require('./presentCipher'); // Import PRESENT functions
 const { generateKey, encryptMessage, decryptMessage } = require('./simonCipher'); // Import Simon functions
 
-// Load the public and private keys
-const publicKey = fs.readFileSync('publicKey.pem', 'utf8'); // Load the public key from a file
-const privateKey = fs.readFileSync('privateKey.pem', 'utf8'); // Load the private key from a file
+const fs = require('fs');
+const publicKey = fs.readFileSync('publicKey.pem', 'utf8'); // Load public key
+const privateKey = fs.readFileSync('privateKey.pem', 'utf8'); // Load private key
 
-// Function to encrypt the symmetric key using RSA
+// Encrypt symmetric key with RSA
 function encryptSymmetricKey(symmetricKey) {
-    const encryptedKey = crypto.publicEncrypt(publicKey, symmetricKey); // Use public key to encrypt
+    const encryptedKey = crypto.publicEncrypt(publicKey, symmetricKey);
     return encryptedKey.toString('base64');
 }
 
-// Function to decrypt the symmetric key using RSA
+// Decrypt symmetric key with RSA
 function decryptSymmetricKey(encryptedKey) {
     const buffer = Buffer.from(encryptedKey, 'base64');
-    const decryptedKey = crypto.privateDecrypt(privateKey, buffer); // Use private key to decrypt
+    const decryptedKey = crypto.privateDecrypt(privateKey, buffer);
     return decryptedKey;
 }
 
-// Function to encrypt a message
+// Encrypt a message with chosen cipher
 function encryptMessageWithCipher(message, cipherType) {
     let symmetricKey;
-    let iv; // Declare iv here for scope
+    let iv = null;
     let encryptedMessage;
 
+    // Generate symmetric key
     if (cipherType === 'present') {
         symmetricKey = crypto.randomBytes(10); // 80 bits for PRESENT
         encryptedMessage = encryptPresent(message, symmetricKey);
@@ -33,37 +33,28 @@ function encryptMessageWithCipher(message, cipherType) {
         symmetricKey = generateKey(); // Generate a 32-byte key for SIMON
         const result = encryptMessage(message, symmetricKey);
         encryptedMessage = result.encryptedData;
-        iv = result.iv; // Initialization vector returned by the encryption
+        iv = result.iv; // Store IV for decryption
     } else {
         throw new Error('Unsupported cipher type');
     }
 
-    // Encrypt the symmetric key using RSA
+    // Encrypt symmetric key
     const encryptedSymmetricKey = encryptSymmetricKey(symmetricKey);
-    
-    // Return both the encrypted message and the encrypted symmetric key
-    return {
-        encryptedMessage,
-        encryptedSymmetricKey,
-        iv, // Return iv if using SIMON
-    };
+
+    return { encryptedMessage, encryptedSymmetricKey, iv };
 }
 
-// Function to decrypt a message
-function decryptMessageWithCipher(encryptedMessage, encryptedSymmetricKey, cipherType, iv) {
-    const decryptedSymmetricKey = decryptSymmetricKey(encryptedSymmetricKey);
-
-    let decryptedMessage;
+// Decrypt a message with chosen cipher
+function decryptMessageWithCipher(encryptedMessage, symmetricKey, cipherType, iv = null) {
     if (cipherType === 'present') {
-        decryptedMessage = decryptPresent(encryptedMessage, decryptedSymmetricKey);
+        return decryptPresent(encryptedMessage, symmetricKey);
     } else if (cipherType === 'simon') {
-        decryptedMessage = decryptMessage(encryptedMessage, decryptedSymmetricKey, iv); // Use iv defined earlier
+        return decryptMessage(encryptedMessage, symmetricKey, iv);
+    } else {
+        throw new Error('Unsupported cipher type');
     }
-
-    return decryptedMessage;
 }
 
-// Export functions
 module.exports = {
     encryptSymmetricKey,
     decryptSymmetricKey,
