@@ -49,7 +49,7 @@ function decryptMessageWithCipher(encryptedMessage, symmetricKey, cipherType, iv
     if (cipherType === 'present') {
         return decryptPresent(encryptedMessage, symmetricKey);
     } else if (cipherType === 'simon') {
-        return decryptMessage(encryptedMessage, symmetricKey, iv);
+        return decryptMessage(encryptedMessage, symmetricKey, Buffer.from(iv, 'base64'));
     } else {
         throw new Error('Unsupported cipher type');
     }
