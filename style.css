@@ -1,0 +1,100 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e5e5e5; /* Light gray background */
+    margin: 0;
+    padding: 20px;
+}
+
+.chat-container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Chat Header */
+.header {
+    background-color: #0095f6; /* Instagram blue */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Chat Messages Area */
+.chat-box {
+    flex-grow: 1;
+    height: 350px;
+    overflow-y: scroll;
+    padding: 10px;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+.chat-box .message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: 75%;
+    position: relative;
+}
+
+.chat-box .message.outgoing {
+    background-color: #0095f6; /* Blue for outgoing messages */
+    color: white;
+    margin-left: auto; /* Align to the right */
+}
+
+.chat-box .message.incoming {
+    background-color: #e5e5e5; /* Light gray for incoming messages */
+    color: black;
+}
+
+/* Input Area */
+.input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px; /* Rounded input field */
+    font-size: 14px;
+}
+
+button {
+    padding: 10px 15px;
+    margin-left: 10px;
+    border: none;
+    background-color: #0095f6; /* Instagram blue */
+    color: white;
+    border-radius: 20px; /* Rounded button */
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #007bbd; /* Darker blue on hover */
+}
+
+#upload-button {
+    padding: 10px;
+    border: none;
+    background-color: transparent; /* Transparent background */
+    cursor: pointer;
+    font-size: 20px; /* Larger icon size */
+    margin-right: 10px;
+}
+
+#upload-button:hover {
+    color: #007bbd; /* Change color on hover */
+}
