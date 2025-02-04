@@ -1,7 +1,7 @@
 // auth.js
 const { createClient } = require('@supabase/supabase-js');
-const supabaseUrl = 'https://rcnuumcccjvoauqazreb.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJjbnV1bWNjY2p2b2F1cWF6cmViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzMTYyMjAsImV4cCI6MjA0ODg5MjIyMH0.uWyddJCKlxAkXr9epKtrAjRo25KDvVl9nB933i4Jj-E';
+const supabaseUrl = 'YOUR_SUPABASE_URL';
+const supabaseKey = 'YOUR_SUPABASE_KEY';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Registration
